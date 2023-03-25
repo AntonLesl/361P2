@@ -1,3 +1,11 @@
+/*
+ * @author: Jordan Casper
+ * @author: Anton Leslie
+ * CS 361
+ * Date: 24 March 2023
+ * Description: Project 2: NFAState Class
+ *
+ */
 package fa.nfa;
 
 import java.util.HashMap;
