@@ -15,10 +15,10 @@ import java.util.Set;
 import fa.State;
 
 public class NFAState extends State {
-    public String from;
-    public char OnSymb;
-    public boolean isFinal;
-    public HashMap<String, NFAState> delta;
+    private String from;
+    private char OnSymb;
+    private boolean isFinal;
+    private HashMap<String, NFAState> delta;
     // Map to model the state's transitions
     private Map<Character, Set<NFAState>> transitions;
 
