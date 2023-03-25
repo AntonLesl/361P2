@@ -15,8 +15,10 @@ import java.util.Set;
 import fa.State;
 
 public class NFAState extends State {
+    //set NFAState instance variables to private 3/24/2023 10:30 PM
     private String from;
     private char OnSymb;
+    //isFinal needs to be set through a public method 3/24/2023 10:30 PM
     private boolean isFinal;
     private HashMap<String, NFAState> delta;
     // Map to model the state's transitions
