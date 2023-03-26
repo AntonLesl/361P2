@@ -21,7 +21,7 @@ public class NFAState extends State {
     private String from;
     private char OnSymb;
     private boolean isFinal; //isFinal needs to be set through a public method 3/24/2023 10:30 PM
-    private HashMap<String, NFAState> delta;
+    public HashMap<String, NFAState> delta;
     // Map to model the state's transitions
 
     private HashMap<Character, HashSet<NFAState>> transitions; //Changed Map to Hashmap simply for consistency 3/25/2023 ~9:45 PM Commit
