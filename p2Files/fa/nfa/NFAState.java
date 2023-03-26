@@ -35,10 +35,10 @@ public class NFAState extends State {
 
     /**
      * @aythor Jordan Casper
-     * Public setter for the isFinal variable.
+     * Public setter for the NFAState isFinal variable.
      * @param b - True or False
      */
-    public void setFinal(boolean b) {
+    public void setstateFinal(boolean b) {
         this.isFinal = b;
     }
 

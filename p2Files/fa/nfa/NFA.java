@@ -20,6 +20,7 @@ public class NFA implements NFAInterface {
      * @return true if a new state created successfully and false if there is already state with such name
      */
     public boolean addState(String name) {
+
         return false;
     }
 
@@ -40,6 +41,7 @@ public class NFA implements NFAInterface {
      * @return true if successful and false if no state with such name exists
      */
     public boolean setStart(String name) {
+
         return false;
     }
 
@@ -60,6 +62,7 @@ public class NFA implements NFAInterface {
      * @return true if s in the language of the FA and false otherwise
      */
     public boolean accepts(String s) {
+
         return false;
     }
 
@@ -69,6 +72,7 @@ public class NFA implements NFAInterface {
      * @return the alphabet of FA
      */
     public Set<Character> getSigma() {
+
         return null;
     }
 
@@ -79,6 +83,7 @@ public class NFA implements NFAInterface {
      * @return state object or null
      */
     public State getState(String name) {
+
         return null;
     }
 
@@ -89,6 +94,7 @@ public class NFA implements NFAInterface {
      * @return true if a state with that name exists and it is final
      */
     public boolean isFinal(String name) {
+
         return false;
     }
 
@@ -99,6 +105,7 @@ public class NFA implements NFAInterface {
      * @return true if a state with that name exists and it is the start state
      */
     public boolean isStart(String name) {
+
         return false;
     }
 
@@ -110,6 +117,7 @@ public class NFA implements NFAInterface {
      * @return a set of sink states
      */
     public Set<NFAState> getToState(NFAState from, char onSymb) {
+
         return null;
     }
 
@@ -121,6 +129,7 @@ public class NFA implements NFAInterface {
      * @return set of states that can be reached from s on epsilon trans.
      */
     public Set<NFAState> eClosure(NFAState s) {
+
         return null;
     }
 
@@ -132,6 +141,7 @@ public class NFA implements NFAInterface {
      * @return - the maximum number of NFA copies created.
      */
     public int maxCopies(String s) {
+
         return 0;
     }
 
@@ -144,6 +154,7 @@ public class NFA implements NFAInterface {
      * @return true if successful and false if one of the states don't exist or the symbol in not in the alphabet
      */
     public boolean addTransition(String fromState, Set<String> toStates, char onSymb) {
+
         return false;
     }
 
@@ -153,6 +164,7 @@ public class NFA implements NFAInterface {
      * @return - true if NFA's transition function has DFA's properties.
      */
     public boolean isDFA() {
+
         return false;
     }
 }
