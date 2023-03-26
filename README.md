@@ -1,8 +1,9 @@
-# Project #: Project Name
+# Project 2: Nondeterministic Finite Automata
 
-* Author: Your Name
-* Class: CS121 Section #
-* Semester: Fall 2022
+* Author: Jordan Casper
+* Author: Anton Leslie
+* Class: CS361 Section 2
+* Semester: Spring 2023
 
 ## Overview
 
