@@ -9,11 +9,8 @@
 package fa.nfa;
 
 import fa.State;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Set;
+
+import java.util.*;
 
 public class NFA implements NFAInterface {
 
@@ -23,6 +20,9 @@ public class NFA implements NFAInterface {
     private Set<NFAState> F;
     private HashSet<Character> sigma;
     private ArrayList<NFAState> numofStates;
+
+    public static final char EPSILON = '\0';
+    public static final char ANY = '.';
 
     /* Constructor */
     public NFA() {
@@ -104,9 +104,45 @@ public class NFA implements NFAInterface {
      * @return true if s in the language of the FA and false otherwise
      */
     public boolean accepts(String s) {
-
+        // Perform breadth-first search
+        Queue<NFAState> queue = new LinkedList<NFAState>();
+        Set<NFAState> visited = new HashSet<NFAState>();
+        queue.add(q0);
+        visited.add(q0);
+        while (!queue.isEmpty()) {
+            NFAState currentState = queue.remove();
+            // Check if the current state is an accepting state
+            if (F.contains(currentState)) {
+                return true;
+            }
+            // Get the next states based on the current symbol or epsilon transition
+            Set<NFAState> nextStates = getToState(currentState, NFA.EPSILON);
+            nextStates.addAll(getToState(currentState, NFA.ANY));
+            if (!nextStates.isEmpty()) {
+                for (NFAState nextState : nextStates) {
+                    if (!visited.contains(nextState)) {
+                        queue.add(nextState);
+                        visited.add(nextState);
+                    }
+                }
+            }
+            for (int i = 0; i < s.length(); i++) {
+                char symbol = s.charAt(i);
+                Set<NFAState> symbolStates = getToState(currentState, symbol);
+                if (!symbolStates.isEmpty()) {
+                    for (NFAState symbolState : symbolStates) {
+                        if (!visited.contains(symbolState)) {
+                            queue.add(symbolState);
+                            visited.add(symbolState);
+                        }
+                    }
+                }
+            }
+        }
         return false;
     }
+
+
 
     /**
      * Getter for Sigma
