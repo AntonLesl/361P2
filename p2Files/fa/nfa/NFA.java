@@ -18,7 +18,7 @@ import java.util.Set;
 public class NFA implements NFAInterface {
 
     /* Variables */
-    private HashSet<NFAState> states;
+    private HashSet<NFAState> Q;
     private NFAState q0;
     private Set<NFAState> F;
     private HashSet<Character> sigma;
@@ -26,7 +26,7 @@ public class NFA implements NFAInterface {
 
     /* Constructor */
     public NFA() {
-        states = new HashSet<NFAState>();
+        Q = new HashSet<NFAState>();
         sigma = new HashSet<Character>();
         F = new HashSet<NFAState>();
         numofStates = new ArrayList<NFAState>();
@@ -41,7 +41,7 @@ public class NFA implements NFAInterface {
     public boolean addState(String name) {
         NFAState state = stateExists(name);
         if (state == null) {
-            states.add(new NFAState(name));
+            Q.add(new NFAState(name));
         } else {
             boolean b = false;
             return b;
@@ -57,7 +57,7 @@ public class NFA implements NFAInterface {
      */
     private NFAState stateExists(String name) {
         NFAState temp = null;
-        for (NFAState s : states) {
+        for (NFAState s : Q) {
             if (s.getName().equals(name)) {
                 temp = s;
                 break;
@@ -156,7 +156,7 @@ public class NFA implements NFAInterface {
      *
      * @param from   - the source state
      * @param onSymb - the label of the transition
-     * @return a set of sink states
+     * @return a set of sink Q
      */
     public Set<NFAState> getToState(NFAState from, char onSymb) {
 
@@ -165,10 +165,10 @@ public class NFA implements NFAInterface {
 
     /**
      * Traverses all epsilon transitions and determine
-     * what states can be reached from s through e
+     * what Q can be reached from s through e
      *
      * @param s
-     * @return set of states that can be reached from s on epsilon trans.
+     * @return set of Q that can be reached from s on epsilon trans.
      */
     public Set<NFAState> eClosure(NFAState s) {
 
@@ -193,7 +193,7 @@ public class NFA implements NFAInterface {
      * @param fromState is the label of the state where the transition starts
      * @param toStates
      * @param onSymb    is the symbol from the NFA's alphabet.
-     * @return true if successful and false if one of the states don't exist or the symbol in not in the alphabet
+     * @return true if successful and false if one of the Q don't exist or the symbol in not in the alphabet
      */
     public boolean addTransition(String fromState, Set<String> toStates, char onSymb) {
 
