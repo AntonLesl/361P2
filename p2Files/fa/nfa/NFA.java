@@ -201,7 +201,7 @@ public class NFA implements NFAInterface {
      */
     @Override
     public boolean isFinal(String name) {
-        NFAState temp = (NFAState) getState(name);
+        NFAState temp =  getState(name);
 
         return false;
     }
