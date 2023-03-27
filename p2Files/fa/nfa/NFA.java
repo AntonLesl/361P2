@@ -75,7 +75,7 @@ public class NFA implements NFAInterface {
     @Override
     public boolean setFinal(String name) {
         NFAState finalS = stateExists(name);
-        if (finalS == null) {
+        if (finalS != null) {
             finalS = new NFAState(name);
             finalS.setstateFinal(true);
             F.add(finalS);
@@ -99,7 +99,7 @@ public class NFA implements NFAInterface {
     public boolean setStart(String name) {
         NFAState state = stateExists(name);
 
-        if (state == null) {
+        if (state != null) {
             state = new NFAState(name);
             this.q0 = state;
             Q.add(state);
@@ -299,19 +299,22 @@ public class NFA implements NFAInterface {
     @Override
     public boolean addTransition(String fromState, Set<String> toStates, char onSymb) {
         // Check that the fromState exists in Q
-        if (!Q.contains(fromState)) {
+        if (Q.contains(fromState)) {
             return false;
         }
 
         // Check that all the toStates exist in Q
         for (String state : toStates) {
-            if (!Q.contains(state)) {
+            if (Q.contains(state)) {
                 return false;
             }
         }
 
         // Check that the symbol is in the alphabet
         if (!sigma.contains(onSymb)) {
+            if (onSymb == 'e'){
+                return true;
+            }
             return false;
         }
 
