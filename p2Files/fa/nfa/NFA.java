@@ -39,8 +39,31 @@ public class NFA implements NFAInterface {
      * @return true if a new state created successfully and false if there is already state with such name
      */
     public boolean addState(String name) {
+        NFAState state = stateExists(name);
+        if (state == null) {
+            states.add(new NFAState(name));
+        } else {
+            boolean b = false;
+            return b;
+        }
+        boolean b = true;
+        return b;
+    }
 
-        return false;
+    /**
+     * Simple check to see if a state with the given name exists or not.
+     * @param name
+     * @return State with the given name or null if the state does not exist.
+     */
+    private NFAState stateExists(String name) {
+        NFAState temp = null;
+        for (NFAState s : states) {
+            if (s.getName().equals(name)) {
+                temp = s;
+                break;
+            }
+        }
+        return temp;
     }
 
     /**
