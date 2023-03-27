@@ -298,19 +298,19 @@ public class NFA implements NFAInterface {
      */
     @Override
     public boolean addTransition(String fromState, Set<String> toStates, char onSymb) {
-        // Check that the fromState exists in Q
+        // Check if the fromState exists in the NFA's set of states
         if (Q.contains(fromState)) {
             return false;
         }
 
-        // Check that all the toStates exist in Q
-        for (String state : toStates) {
-            if (Q.contains(state)) {
+        // Check if all toStates exist in the NFA's set of states
+        for (String toState : toStates) {
+            if (Q.contains(toState)) {
                 return false;
             }
         }
 
-        // Check that the symbol is in the alphabet
+        // Check if the symbol is in the NFA's alphabet
         if (!sigma.contains(onSymb)) {
             if (onSymb == 'e'){
                 return true;
@@ -318,10 +318,12 @@ public class NFA implements NFAInterface {
             return false;
         }
 
+        // Add the transition to the NFA's delta data structure
 
 
         return true;
     }
+
 
 
     /**
