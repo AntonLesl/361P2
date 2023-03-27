@@ -264,14 +264,14 @@ public class NFA implements NFAInterface {
      * @return - the maximum number of NFA copies created.
      */
     @Override
-    public int maxCopies(String input) {
+    public int maxCopies(String s) {
         Set<NFAState> currStates = new HashSet<>();
         currStates.add(q0);
         currStates.addAll(eClosure(q0));
 
         int maxCopies = currStates.size();
 
-        for (char symbol : input.toCharArray()) {
+        for (char symbol : s.toCharArray()) {
             Set<NFAState> nextStates = new HashSet<>();
             for (NFAState state : currStates) {
                 Set<NFAState> transitions = getToState(state, symbol);
