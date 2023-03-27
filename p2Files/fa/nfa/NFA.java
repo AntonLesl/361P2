@@ -95,8 +95,17 @@ public class NFA implements NFAInterface {
      * @return true if successful and false if no state with such name exists
      */
     public boolean setStart(String name) {
-
-        return false;
+        NFAState state = stateExists(name);
+        if (state == null) {
+            state = new NFAState(name);
+            this.q0 = state;
+            Q.add(state);
+            boolean b = true;
+            return b;
+        } else {
+            boolean b = false;
+            return b;
+        }
     }
 
     /**
