@@ -19,17 +19,15 @@ public class NFA implements NFAInterface {
     private NFAState q0;
     private Set<NFAState> F;
     private HashSet<Character> sigma;
-    private ArrayList<NFAState> numofStates;
 
-    public static final char EPSILON = '\0';
-    public static final char ANY = '.';
+
+
 
     /* Constructor */
     public NFA() {
         Q = new HashSet<NFAState>();
         sigma = new HashSet<Character>();
         F = new HashSet<NFAState>();
-        numofStates = new ArrayList<NFAState>();
     }
 
     /**
@@ -38,6 +36,7 @@ public class NFA implements NFAInterface {
      * @param name is the label of the state
      * @return true if a new state created successfully and false if there is already state with such name
      */
+    @Override
     public boolean addState(String name) {
         NFAState state = stateExists(name);
         if (state == null) {
@@ -55,6 +54,7 @@ public class NFA implements NFAInterface {
      * @param name
      * @return State with the given name or null if the state does not exist.
      */
+
     private NFAState stateExists(String name) {
         NFAState temp = null;
         for (NFAState s : Q) {
@@ -72,6 +72,7 @@ public class NFA implements NFAInterface {
      * @param name is the label of the state
      * @return true if successful and false if no state with such name exists
      */
+    @Override
     public boolean setFinal(String name) {
         NFAState finalS = stateExists(name);
         if (finalS == null) {
@@ -94,6 +95,7 @@ public class NFA implements NFAInterface {
      * @param name is the label of the start state
      * @return true if successful and false if no state with such name exists
      */
+    @Override
     public boolean setStart(String name) {
         NFAState state = stateExists(name);
         if (state == null) {
@@ -113,6 +115,7 @@ public class NFA implements NFAInterface {
      *
      * @param symbol to add to the alphabet set
      */
+    @Override
     public void addSigma(char symbol) {
         sigma.add(symbol);
     }
@@ -124,44 +127,33 @@ public class NFA implements NFAInterface {
      * @param s - the input string
      * @return true if s in the language of the FA and false otherwise
      */
+    @Override
     public boolean accepts(String s) {
-        // Perform breadth-first search
-        Queue<NFAState> queue = new LinkedList<NFAState>();
-        Set<NFAState> visited = new HashSet<NFAState>();
-        queue.add(q0);
-        visited.add(q0);
-        while (!queue.isEmpty()) {
-            NFAState currentState = queue.remove();
-            // Check if the current state is an accepting state
-            if (F.contains(currentState)) {
+        Set<NFAState> currStates = new HashSet<>();
+        currStates.add(q0);
+        currStates.addAll(eClosure(q0));
+
+        for (char symbol : s.toCharArray()) {
+            Set<NFAState> nextStates = new HashSet<>();
+            for (NFAState state : currStates) {
+                Set<NFAState> transitions = getToState(state, symbol);
+                nextStates.addAll(transitions);
+                for (NFAState transition : transitions) {
+                    nextStates.addAll(eClosure(transition));
+                }
+            }
+            currStates = nextStates;
+        }
+
+        for (NFAState state : currStates) {
+            if (F.contains(state)) {
                 return true;
-            }
-            // Get the next states based on the current symbol or epsilon transition
-            Set<NFAState> nextStates = getToState(currentState, NFA.EPSILON);
-            nextStates.addAll(getToState(currentState, NFA.ANY));
-            if (!nextStates.isEmpty()) {
-                for (NFAState nextState : nextStates) {
-                    if (!visited.contains(nextState)) {
-                        queue.add(nextState);
-                        visited.add(nextState);
-                    }
-                }
-            }
-            for (int i = 0; i < s.length(); i++) {
-                char symbol = s.charAt(i);
-                Set<NFAState> symbolStates = getToState(currentState, symbol);
-                if (!symbolStates.isEmpty()) {
-                    for (NFAState symbolState : symbolStates) {
-                        if (!visited.contains(symbolState)) {
-                            queue.add(symbolState);
-                            visited.add(symbolState);
-                        }
-                    }
-                }
             }
         }
         return false;
     }
+
+
 
 
 
@@ -170,6 +162,7 @@ public class NFA implements NFAInterface {
      *
      * @return the alphabet of FA
      */
+    @Override
     public Set<Character> getSigma() {
 
         return sigma;
@@ -183,6 +176,7 @@ public class NFA implements NFAInterface {
      * @param name of a state
      * @return state object or null
      */
+    @Override
     public State getState(String name) {
         NFAState temp = null;
         if (Q.contains(name)) {
@@ -203,6 +197,7 @@ public class NFA implements NFAInterface {
      * @param name the name of the state
      * @return true if a state with that name exists and it is final
      */
+    @Override
     public boolean isFinal(String name) {
 
         return false;
@@ -214,6 +209,7 @@ public class NFA implements NFAInterface {
      * @param name the name of the state
      * @return true if a state with that name exists and it is the start state
      */
+    @Override
     public boolean isStart(String name) {
 
         return false;
@@ -226,9 +222,9 @@ public class NFA implements NFAInterface {
      * @param onSymb - the label of the transition
      * @return a set of sink Q
      */
+    @Override
     public Set<NFAState> getToState(NFAState from, char onSymb) {
-
-        return null;
+        return from.getToStates(onSymb);
     }
 
     /**
@@ -238,10 +234,28 @@ public class NFA implements NFAInterface {
      * @param s
      * @return set of Q that can be reached from s on epsilon trans.
      */
+    @Override
     public Set<NFAState> eClosure(NFAState s) {
+        Set<NFAState> eClosure = new HashSet<>();
+        Stack<NFAState> stack = new Stack<>();
+        stack.push(s);
 
-        return null;
+        while (!stack.isEmpty()) {
+            NFAState currState = stack.pop();
+            eClosure.add(currState);
+
+            Set<NFAState> epsilonTransitions = getToState(currState, 'e');
+            for (NFAState epsilonState : epsilonTransitions) {
+                if (!eClosure.contains(epsilonState)) {
+                    stack.push(epsilonState);
+                    eClosure.add(epsilonState);
+                }
+            }
+        }
+
+        return eClosure;
     }
+
 
     /**
      * Determines the maximum number of NFA copies
@@ -250,10 +264,30 @@ public class NFA implements NFAInterface {
      * @param s - the input string
      * @return - the maximum number of NFA copies created.
      */
-    public int maxCopies(String s) {
+    @Override
+    public int maxCopies(String input) {
+        Set<NFAState> currStates = new HashSet<>();
+        currStates.add(q0);
+        currStates.addAll(eClosure(q0));
 
-        return 0;
+        int maxCopies = currStates.size();
+
+        for (char symbol : input.toCharArray()) {
+            Set<NFAState> nextStates = new HashSet<>();
+            for (NFAState state : currStates) {
+                Set<NFAState> transitions = getToState(state, symbol);
+                nextStates.addAll(transitions);
+                for (NFAState transition : transitions) {
+                    nextStates.addAll(eClosure(transition));
+                }
+            }
+            currStates = nextStates;
+            maxCopies = Math.max(maxCopies, currStates.size());
+        }
+
+        return maxCopies;
     }
+
 
     /**
      * Adds the transition to the NFA's delta data structure
@@ -263,6 +297,7 @@ public class NFA implements NFAInterface {
      * @param onSymb    is the symbol from the NFA's alphabet.
      * @return true if successful and false if one of the Q don't exist or the symbol in not in the alphabet
      */
+    @Override
     public boolean addTransition(String fromState, Set<String> toStates, char onSymb) {
         // Check that the fromState exists in Q
         if (!Q.contains(fromState)) {
@@ -298,6 +333,7 @@ public class NFA implements NFAInterface {
      *
      * @return - true if NFA's transition function has DFA's properties.
      */
+    @Override
     public boolean isDFA() {
 
         return false;
