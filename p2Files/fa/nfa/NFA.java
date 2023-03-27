@@ -155,10 +155,6 @@ public class NFA implements NFAInterface {
         return false;
     }
 
-
-
-
-
     /**
      * Getter for Sigma
      *
