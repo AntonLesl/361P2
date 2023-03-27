@@ -9,10 +9,29 @@
 package fa.nfa;
 
 import fa.State;
-
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Set;
 
 public class NFA implements NFAInterface {
+
+    /* Variables */
+    private HashSet<NFAState> states;
+    private NFAState q0;
+    private Set<NFAState> F;
+    private HashSet<Character> sigma;
+    private ArrayList<NFAState> numofStates;
+
+    /* Constructor */
+    public NFA() {
+        states = new HashSet<NFAState>();
+        sigma = new HashSet<Character>();
+        F = new HashSet<NFAState>();
+        numofStates = new ArrayList<NFAState>();
+    }
+
     /**
      * Adds a a state to the FA instance
      *
