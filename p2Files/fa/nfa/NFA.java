@@ -317,12 +317,6 @@ public class NFA implements NFAInterface {
         }
 
 
-        // Add the transition to delta
-        //Map<Character, Set<String>> fromStateTransitions = delta.getOrDefault(fromState, new HashMap<>());
-        //Set<String> toStateSet = fromStateTransitions.getOrDefault(onSymb, new HashSet<>());
-        //toStateSet.addAll(toStates);
-        //fromStateTransitions.put(onSymb, toStateSet);
-        //delta.put(fromState, fromStateTransitions);
 
         return true;
     }
