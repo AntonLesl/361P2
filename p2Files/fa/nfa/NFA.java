@@ -114,7 +114,7 @@ public class NFA implements NFAInterface {
      * @param symbol to add to the alphabet set
      */
     public void addSigma(char symbol) {
-
+        sigma.add(symbol);
     }
 
     /**
@@ -172,8 +172,10 @@ public class NFA implements NFAInterface {
      */
     public Set<Character> getSigma() {
 
-        return null;
+        return sigma;
     }
+
+
 
     /**
      * Returns state with the given name, or null if none exists
@@ -182,8 +184,17 @@ public class NFA implements NFAInterface {
      * @return state object or null
      */
     public State getState(String name) {
+        NFAState temp = null;
+        if (Q.contains(name)) {
+            for (NFAState element : Q) {
+                if (element.getName().equals(name)) {
+                    temp = element;
+                    return temp;
+                }
+            }
+        }
+        return temp;
 
-        return null;
     }
 
     /**
@@ -253,9 +264,34 @@ public class NFA implements NFAInterface {
      * @return true if successful and false if one of the Q don't exist or the symbol in not in the alphabet
      */
     public boolean addTransition(String fromState, Set<String> toStates, char onSymb) {
+        // Check that the fromState exists in Q
+        if (!Q.contains(fromState)) {
+            return false;
+        }
 
-        return false;
+        // Check that all the toStates exist in Q
+        for (String state : toStates) {
+            if (!Q.contains(state)) {
+                return false;
+            }
+        }
+
+        // Check that the symbol is in the alphabet
+        if (!sigma.contains(onSymb)) {
+            return false;
+        }
+
+
+        // Add the transition to delta
+        //Map<Character, Set<String>> fromStateTransitions = delta.getOrDefault(fromState, new HashMap<>());
+        //Set<String> toStateSet = fromStateTransitions.getOrDefault(onSymb, new HashSet<>());
+        //toStateSet.addAll(toStates);
+        //fromStateTransitions.put(onSymb, toStateSet);
+        //delta.put(fromState, fromStateTransitions);
+
+        return true;
     }
+
 
     /**
      * Determines if NFA is an instance of a DFA

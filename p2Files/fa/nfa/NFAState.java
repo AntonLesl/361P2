@@ -56,7 +56,8 @@ public class NFAState extends State {
      * Getter to retrieve the transition functions.
      * @return transitions HashMap
      */
-    public HashMap<Character, HashSet<NFAState>> getTransitions() {
+    public HashMap<Character, HashSet<NFAState>> getstateTransitions() {
+
         return transitions;
     }
 
@@ -67,7 +68,7 @@ public class NFAState extends State {
      * @param onSymb the symbol triggering the transition
      * @param toState the state to transition to
      */
-    public void addTransition(char onSymb, NFAState toState) {
+    public void addstateTransition(char onSymb, NFAState toState) {
         //Changed the addTransition method to check if there is already
         // a HashSet that is associated with the onSymb and if there is not
         // it creates a new empty Hashset. Then it adds the destination state(toState)
