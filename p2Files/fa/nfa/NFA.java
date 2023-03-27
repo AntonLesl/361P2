@@ -98,10 +98,12 @@ public class NFA implements NFAInterface {
     @Override
     public boolean setStart(String name) {
         NFAState state = stateExists(name);
+
         if (state == null) {
             state = new NFAState(name);
             this.q0 = state;
             Q.add(state);
+            state.setstateStart(true);
             boolean b = true;
             return b;
         } else {
@@ -177,7 +179,7 @@ public class NFA implements NFAInterface {
      * @return state object or null
      */
     @Override
-    public State getState(String name) {
+    public NFAState getState(String name) {
         NFAState temp = null;
         if (Q.contains(name)) {
             for (NFAState element : Q) {
@@ -199,6 +201,7 @@ public class NFA implements NFAInterface {
      */
     @Override
     public boolean isFinal(String name) {
+        NFAState temp = (NFAState) getState(name);
 
         return false;
     }
@@ -224,7 +227,7 @@ public class NFA implements NFAInterface {
      */
     @Override
     public Set<NFAState> getToState(NFAState from, char onSymb) {
-        return from.getToStates(onSymb);
+        return from.toStates(onSymb);
     }
 
     /**

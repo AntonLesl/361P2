@@ -21,6 +21,7 @@ public class NFAState extends State {
     private String from;
     private char OnSymb;
     private boolean isFinal; //isFinal needs to be set through a public method 3/24/2023 10:30 PM
+    private boolean isStart;
     public HashMap<String, NFAState> delta;
     // Map to model the state's transitions
 
@@ -30,6 +31,7 @@ public class NFAState extends State {
     public NFAState(String name) {
         super(name);
         isFinal = false;
+        isStart = false;
         transitions = new HashMap<Character, HashSet<NFAState>>();
     }
 
@@ -43,12 +45,30 @@ public class NFAState extends State {
     }
 
     /**
+     * @aythor Jordan Casper
+     * Public setter for the NFAState isStart variable.
+     * @param b - True or False
+     */
+    public void setstateStart(boolean b) {
+        this.isStart = b;
+    }
+
+    /**
      * @author Jordan Casper
      * Getter to check whether the state is a final state or not.
      * @return isFinal
      */
     public boolean getFinal() {
         return isFinal;
+    }
+
+    /**
+     * @author Jordan Casper
+     * Getter to check whether the state is a final state or not.
+     * @return isFinal
+     */
+    public boolean getStart() {
+        return isStart;
     }
 
     /**
@@ -89,7 +109,7 @@ public class NFAState extends State {
      * @param onSymb the symbol triggering the transition
      * @return set of reachable states, or empty set if no transition on the symbol
      */
-    public Set<NFAState> getToStates(char onSymb) {
+    public Set<NFAState> toStates(char onSymb) {
         //Added error handling in case the return is null.
         //as  ~10:00 PM 3/25/2023 Commit
         HashSet<NFAState> temp = transitions.get(onSymb);
@@ -100,5 +120,6 @@ public class NFAState extends State {
         //If the return is not null then returns the ToStates.
         return transitions.get(onSymb);
     }
+
 
 }
