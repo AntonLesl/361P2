@@ -292,38 +292,23 @@ public class NFA implements NFAInterface {
      * Adds the transition to the NFA's delta data structure
      *
      * @param fromState is the label of the state where the transition starts
-     * @param toStates
-     * @param onSymb    is the symbol from the NFA's alphabet.
-     * @return true if successful and false if one of the Q don't exist or the symbol in not in the alphabet
+     * @param toStates  is the set of labels of the states where the transition goes
+     * @param onSymb    is the symbol from the NFA's alphabet
+     * @return true if successful and false if one of the states don't exist or the symbol is not in the alphabet
      */
     @Override
     public boolean addTransition(String fromState, Set<String> toStates, char onSymb) {
         // Check if the fromState exists in the NFA's set of states
-        if (Q.contains(fromState)) {
+        if (!Q.contains(fromState) || (!Q.contains(toStates))|| (sigma.contains(onSymb) && onSymb != 'e')) {
             return false;
         }
 
-        // Check if all toStates exist in the NFA's set of states
-        for (String toState : toStates) {
-            if (Q.contains(toState)) {
-                return false;
-            }
-        }
-
-        // Check if the symbol is in the NFA's alphabet
-        if (!sigma.contains(onSymb)) {
-            if (onSymb == 'e'){
-                return true;
-            }
-            return false;
-        }
 
         // Add the transition to the NFA's delta data structure
 
 
         return true;
     }
-
 
 
     /**
