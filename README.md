@@ -7,14 +7,10 @@
 
 ## Overview
 
-This is a programming project where we implemented two classes that model an instance of a nondeterministic finite automaton (NFA) and its behavior. 
-This project requires you to implement the NFA class, which should implement the NFAInterface interface and extend the State class, both located in the fa.nfa package. 
-The project also requires you to implement the graph search algorithms: Breadth First Search (BFS) and Depth First Search (DFS). 
-You will be provided with several test cases, and you will have to create additional test cases to further test your implementation. 
-The NFA class have methods to add states, set start and final states, add transitions, compute eClosures, and check if a string is accepted by the NFA. 
-The accepts method should simulate traversing the NFA graph using BFS to keep track of all the NFA's copies created while following symbols in input. 
-The method returns false when after reading all the symbols, none of the copies are in any accepting state. 
-The maxCopies method should return the maximum number of copies a trace can generate.
+This is a programming project where we implemented two classes that model an instance of a nondeterministic finite 
+automaton (NFA) and it's behavior. This project utilizes a breadth first search algorithm to determine whether 
+the NFA is accepted or not and a depth first search algorithm to traverse through all the Epsilon transitions.
+
 
 ## Reflection
 
@@ -23,6 +19,14 @@ which worked well for us. However, we faced a significant struggle with the test
 which caused errors and prevented it from running. 
 We adopted a debugging approach to identify the issues in the test class and resolve them. 
 This helped us understand the challenges we were facing and enabled us to progress with the project.
+
+One of the big issues that we ran across was getting the tests to function properly. We understood that
+we were unable to modify any of the tests or the given method parameters. In the beginning we were getting an error
+due to the getState method returning the type State instead of NFAState which caused the tests to not be able to run. 
+This error was caused by us using the IDE to add the unimplemented methods and not taking into account the extends
+and implements functionality in Java. This issue with the tests was easily solved by modifying the return type 
+of getState to NFAState instead of State and for it to Override the method declared in it's supertype. This fixed
+the issues we were having with the inability to test properly.
 
 During the project, we found the concepts of max copies and implementing the bfs method unclear. 
 To tackle this, we used condition statements in the debug methods to identify the areas we were not covering in our code, 
@@ -43,10 +47,8 @@ java NFATest
 
 ## Sources used
 
-If you used any sources outside of the lecture notes, class lab files,
-or text book you need to list them here. If you looked something up on
-stackoverflow.com and fail to cite it in this section it will be
-considered plagiarism and be dealt with accordingly. So be safe CITE!
+The sources used were Oracle documentation specifically, Collections which was extremely helpful when
+writing the methods to use Breadth First Search and Depth First Search.
 
 ----------
 This README template is using Markdown. To preview your README output,
