@@ -40,10 +40,17 @@ identifying what was essential and what would take longer to solve, and starting
 
 ## Compiling and Using
 
-javac *.java 
-cd test.nfa 
-javac NFATest.java
-java NFATest
+While in the project directory: <br>
+$ javac ./fa/nfa/NFAState.java <br>
+$ javac ./fa/nfa/NFA.java <br>
+
+To compile the tests: <br>
+$ javac -cp .:/usr/share/java/junit.jar ./test/nfa/NFATest.java <br>
+
+To run the tests: <br>
+$ java -cp .:/usr/share/java/junit.jar:/usr/share/java/hamcrest/core.jar org.junit.runner.JUnitCore test.nfa.NFATest <br>
+
+
 
 ## Sources used
 
