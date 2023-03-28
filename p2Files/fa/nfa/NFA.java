@@ -41,12 +41,10 @@ public class NFA implements NFAInterface {
         NFAState state = stateExists(name);
         if (state == null) {
             Q.add(new NFAState(name));
+            return true;
         } else {
-            boolean b = false;
-            return b;
+            return false;
         }
-        boolean b = true;
-        return b;
     }
 
     /**
@@ -79,13 +77,11 @@ public class NFA implements NFAInterface {
             finalS = new NFAState(name);
             finalS.setstateFinal(true);
             F.add(finalS);
-            Q.add(finalS);
-            boolean b = true;
-            return b;
+            return true;
+
         }
         else{
-            boolean b = false;
-            return b;
+            return false;
         }
     }
 
@@ -100,15 +96,12 @@ public class NFA implements NFAInterface {
         NFAState state = stateExists(name);
 
         if (state != null) {
-            state = new NFAState(name);
             this.q0 = state;
-            Q.add(state);
             state.setstateStart(true);
-            boolean b = true;
-            return b;
+            return true;
         } else {
-            boolean b = false;
-            return b;
+            return false;
+
         }
     }
 
@@ -176,18 +169,14 @@ public class NFA implements NFAInterface {
      */
     @Override
     public NFAState getState(String name) {
-        NFAState temp = null;
-        if (Q.contains(name)) {
-            for (NFAState element : Q) {
-                if (element.getName().equals(name)) {
-                    temp = element;
-                    return temp;
-                }
+        for (NFAState state : Q) {
+            if (state.getName().equals(name)) {
+                return state;
             }
         }
-        return temp;
-
+        return null;
     }
+
 
     /**
      * Determines if a state with a given name is final
@@ -298,17 +287,28 @@ public class NFA implements NFAInterface {
      */
     @Override
     public boolean addTransition(String fromState, Set<String> toStates, char onSymb) {
-        // Check if the fromState exists in the NFA's set of states
-        if (!Q.contains(fromState) || (!Q.contains(toStates))|| (sigma.contains(onSymb) && onSymb != 'e')) {
+
+        boolean added = false;
+        if (!sigma.contains(onSymb) && onSymb != 'e') {
+
             return false;
         }
-
-
-        // Add the transition to the NFA's delta data structure
-
-
-        return true;
+        NFAState from = getState(fromState);
+        // If state from exists, add transition(s) to it
+        if (from != null) {
+            for (String toState : toStates) {
+                NFAState to = getState(toState);
+                // If state to exists, add the transition
+                if (to != null) {
+                    from.addstateTransition(onSymb, to);
+                    added = true;
+                }
+            }
+        }
+        return added;
     }
+
+
 
 
     /**
@@ -318,7 +318,26 @@ public class NFA implements NFAInterface {
      */
     @Override
     public boolean isDFA() {
+        // Check if every state has exactly one transition for each symbol in sigma
+        for (NFAState state : Q) {
+            HashMap<Character, HashSet<NFAState>> transitions = state.getstateTransitions();
+            if (transitions.size() != sigma.size()) {
+                return false;
+            }
+            for (char symbol : sigma) {
+                if (!transitions.containsKey(symbol) || transitions.get(symbol).size() != 1) {
+                    return false;
+                }
+            }
+        }
 
-        return false;
+        // Check if there are no epsilon transitions
+        for (NFAState state : Q) {
+            if (state.getstateTransitions().containsKey('e')) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

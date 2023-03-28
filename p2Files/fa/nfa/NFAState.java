@@ -13,26 +13,20 @@ import java.util.HashSet;
 import java.util.Set;
 import fa.State;
 
-//I will be cleaning up these comments later of the changes that I made but
-//I am keeping them in for now before we submit the project so that
-//you know why I made the changes that I made.
+
 public class NFAState extends State {
     //set NFAState instance variables to private 3/24/2023 10:30 PM
-    private String from;
-    private char OnSymb;
+
     private boolean isFinal; //isFinal needs to be set through a public method 3/24/2023 10:30 PM
     private boolean isStart;
-    public HashMap<String, NFAState> delta;
-    // Map to model the state's transitions
+    private HashMap<Character,HashSet<NFAState>> delta;
 
-    private HashMap<Character, HashSet<NFAState>> transitions; //Changed Map to Hashmap simply for consistency 3/25/2023 ~9:45 PM Commit
-    //Changed Set<NFAState> to HashSet<NFAState> as a Hashset will check for duplicates automatically
-    // as well as the Hashset having faster access time and therefor more efficient. ~10:00 PM 3/25/2023 Commit
+
     public NFAState(String name) {
         super(name);
         isFinal = false;
         isStart = false;
-        transitions = new HashMap<Character, HashSet<NFAState>>();
+        delta = new HashMap<Character,HashSet<NFAState>> ();
     }
 
     /**
@@ -78,7 +72,7 @@ public class NFAState extends State {
      */
     public HashMap<Character, HashSet<NFAState>> getstateTransitions() {
 
-        return transitions;
+        return delta;
     }
 
     /**
@@ -94,12 +88,12 @@ public class NFAState extends State {
         // it creates a new empty Hashset. Then it adds the destination state(toState)
         // to the HashSet and puts the updated HashSet back into the HashMap for
         // the input symbol OnSymb. ~10:00 PM 3/25/2023 Commit
-        HashSet<NFAState> state = transitions.get(onSymb);
+        HashSet<NFAState> state = delta.get(onSymb);
         if (state == null) {
             state = new HashSet<NFAState>();
         }
          state.add(toState);
-         transitions.put(onSymb, state);
+         delta.put(onSymb, state);
     }
 
     /**
@@ -112,13 +106,13 @@ public class NFAState extends State {
     public Set<NFAState> toStates(char onSymb) {
         //Added error handling in case the return is null.
         //as  ~10:00 PM 3/25/2023 Commit
-        HashSet<NFAState> temp = transitions.get(onSymb);
+        HashSet<NFAState> temp = delta.get(onSymb);
         if(temp == null) {
             System.err.println("Error: Returns null on " + onSymb + " from " + getName());
             System.exit(1);
         }
         //If the return is not null then returns the ToStates.
-        return transitions.get(onSymb);
+        return delta.get(onSymb);
     }
 
 
