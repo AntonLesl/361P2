@@ -74,11 +74,9 @@ public class NFA implements NFAInterface {
     public boolean setFinal(String name) {
         NFAState finalS = stateExists(name);
         if (finalS != null) {
-            finalS = new NFAState(name);
             finalS.setstateFinal(true);
             F.add(finalS);
             return true;
-
         }
         else{
             return false;
@@ -186,9 +184,12 @@ public class NFA implements NFAInterface {
      */
     @Override
     public boolean isFinal(String name) {
-        NFAState temp =  getState(name);
-
-        return false;
+        NFAState temp = stateExists(name);
+        if(temp != null) {
+            return temp.getFinal();
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -199,8 +200,13 @@ public class NFA implements NFAInterface {
      */
     @Override
     public boolean isStart(String name) {
+        NFAState temp = stateExists(name);
+        if(temp != null) {
+            return temp.getStart();
+        } else {
+            return false;
+        }
 
-        return false;
     }
 
     /**
