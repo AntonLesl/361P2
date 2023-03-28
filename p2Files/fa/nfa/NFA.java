@@ -113,6 +113,7 @@ public class NFA implements NFAInterface {
         sigma.add(symbol);
     }
 
+
     /**
      * Simulates a FA on input s to determine
      * whether the FA accepts s.
@@ -122,29 +123,43 @@ public class NFA implements NFAInterface {
      */
     @Override
     public boolean accepts(String s) {
-        Set<NFAState> currStates = new HashSet<>();
-        currStates.add(q0);
-        currStates.addAll(eClosure(q0));
+        // Keep track of all active states in the NFA
+        Set<NFAState> activeStates = new HashSet<>();
+        activeStates.add(q0);
 
-        for (char symbol : s.toCharArray()) {
-            Set<NFAState> nextStates = new HashSet<>();
-            for (NFAState state : currStates) {
-                Set<NFAState> transitions = getToState(state, symbol);
-                nextStates.addAll(transitions);
-                for (NFAState transition : transitions) {
-                    nextStates.addAll(eClosure(transition));
+        // Compute eClosure of initial state and add all resulting states to active states
+        Set<NFAState> eClosure = eClosure(q0);
+        activeStates.addAll(eClosure);
+
+        // Process each input symbol and update active states accordingly
+        for (char c : s.toCharArray()) {
+            Set<NFAState> newActiveStates = new HashSet<>();
+            for (NFAState state : activeStates) {
+                // Get all the states reachable from the current state on symbol c
+                Set<NFAState> reachableStates = getToState(state, c);
+
+                // Compute eClosure for each reachable state and add all resulting states to newActiveStates
+                if (reachableStates != null) {
+                    for (NFAState reachableState : reachableStates) {
+                        Set<NFAState> reachableEClosure = eClosure(reachableState);
+                        newActiveStates.addAll(reachableEClosure);
+                    }
                 }
             }
-            currStates = nextStates;
+            activeStates = newActiveStates;
         }
 
-        for (NFAState state : currStates) {
-            if (F.contains(state)) {
+        // Check if any of the active states are accepting states
+        for (NFAState state : activeStates) {
+            if (state.getFinal()) {
                 return true;
             }
         }
+
         return false;
     }
+
+
 
     /**
      * Getter for Sigma
@@ -239,10 +254,12 @@ public class NFA implements NFAInterface {
             eClosure.add(currState);
 
             Set<NFAState> epsilonTransitions = getToState(currState, 'e');
-            for (NFAState epsilonState : epsilonTransitions) {
-                if (!eClosure.contains(epsilonState)) {
-                    stack.push(epsilonState);
-                    eClosure.add(epsilonState);
+            if (epsilonTransitions != null) {
+                for (NFAState epsilonState : epsilonTransitions) {
+                    if (!eClosure.contains(epsilonState)) {
+                        stack.push(epsilonState);
+                        eClosure.add(epsilonState);
+                    }
                 }
             }
         }
@@ -270,9 +287,11 @@ public class NFA implements NFAInterface {
             Set<NFAState> nextStates = new HashSet<>();
             for (NFAState state : currStates) {
                 Set<NFAState> transitions = getToState(state, symbol);
-                nextStates.addAll(transitions);
-                for (NFAState transition : transitions) {
-                    nextStates.addAll(eClosure(transition));
+                if(transitions != null) {
+                    nextStates.addAll(transitions);
+                    for (NFAState transition : transitions) {
+                        nextStates.addAll(eClosure(transition));
+                    }
                 }
             }
             currStates = nextStates;

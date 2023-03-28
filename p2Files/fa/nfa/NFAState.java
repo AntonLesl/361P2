@@ -20,6 +20,7 @@ public class NFAState extends State {
     private HashMap<Character,HashSet<NFAState>> delta;
 
 
+
     public NFAState(String name) {
         super(name);
         isFinal = false;
