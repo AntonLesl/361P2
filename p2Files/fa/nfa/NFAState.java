@@ -15,9 +15,7 @@ import fa.State;
 
 
 public class NFAState extends State {
-    //set NFAState instance variables to private 3/24/2023 10:30 PM
-
-    private boolean isFinal; //isFinal needs to be set through a public method 3/24/2023 10:30 PM
+    private boolean isFinal;
     private boolean isStart;
     private HashMap<Character,HashSet<NFAState>> delta;
 
@@ -83,11 +81,6 @@ public class NFAState extends State {
      * @param toState the state to transition to
      */
     public void addstateTransition(char onSymb, NFAState toState) {
-        //Changed the addTransition method to check if there is already
-        // a HashSet that is associated with the onSymb and if there is not
-        // it creates a new empty Hashset. Then it adds the destination state(toState)
-        // to the HashSet and puts the updated HashSet back into the HashMap for
-        // the input symbol OnSymb. ~10:00 PM 3/25/2023 Commit
         HashSet<NFAState> state = delta.get(onSymb);
         if (state == null) {
             state = new HashSet<NFAState>();
@@ -104,14 +97,8 @@ public class NFAState extends State {
      * @return set of reachable states, or empty set if no transition on the symbol
      */
     public Set<NFAState> toStates(char onSymb) {
-        //Added error handling in case the return is null.
-        //as  ~10:00 PM 3/25/2023 Commit
+
         HashSet<NFAState> temp = delta.get(onSymb);
-        if(temp == null) {
-            System.err.println("Error: Returns null on " + onSymb + " from " + getName());
-            System.exit(1);
-        }
-        //If the return is not null then returns the ToStates.
         return delta.get(onSymb);
     }
 
